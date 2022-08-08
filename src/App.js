@@ -37,23 +37,23 @@ const Loader = () => {
   )
 };
 
-  const Frame = ()=> {
-    useFrame(() => {
-      console.log("frame");
-    })
-  }
+const Frame = () => {
+  useFrame(() => {
+    console.log("frame");
+  })
+}
 
 
 export default function App() {
 
   const controls = useRef(null);
 
-  const updateOrbit = ()=> {
+  const updateOrbit = () => {
     console.log("updates");
   }
 
 
-  
+
 
 
 
