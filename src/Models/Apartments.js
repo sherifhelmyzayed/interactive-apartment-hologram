@@ -201,7 +201,9 @@ export function Model(props) {
                 material={materials.GreyColor}
                 position={[166.46, 559.72, -1189.83]}
                 scale={[1, 1, 0.03]}
-              />
+              >
+                <meshStandardMaterial {...materials.GreyColor} color={"#d4d4d4"} />
+              </mesh>
             ) : null
           }
           {
