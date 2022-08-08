@@ -1,7 +1,6 @@
-import { useRef, useState, Suspense } from "react";
-import * as THREE from "three";
-import { Canvas, extend, useFrame } from "@react-three/fiber";
-import { OrbitControls, Environment, ContactShadows, useProgress, Html, useTexture } from "@react-three/drei";
+import { useRef, Suspense } from "react";
+import { Canvas, extend } from "@react-three/fiber";
+import { OrbitControls, ContactShadows, useProgress, Html } from "@react-three/drei";
 import { Model } from "./Models/Apartments.js";
 
 // import B02 from "./Components/B02";
@@ -9,22 +8,6 @@ import { Model } from "./Models/Apartments.js";
 
 extend({ OrbitControls });
 
-
-function Dome() {
-
-  return (
-    <group>
-      <mesh rotation={[0, 3, 0]}>
-        <sphereBufferGeometry attach="geometry" args={[5000, 200, 200]} />
-        <meshBasicMaterial
-          attach="material"
-          map={useTexture('https://bricksvisuals.com/images/test/pic1.jpeg')}
-          side={THREE.BackSide}
-        />
-      </mesh>
-    </group>
-  );
-}
 
 
 const Loader = () => {
@@ -37,11 +20,6 @@ const Loader = () => {
   )
 };
 
-const Frame = () => {
-  useFrame(() => {
-    console.log("frame");
-  })
-}
 
 
 export default function App() {
@@ -51,10 +29,6 @@ export default function App() {
   const updateOrbit = () => {
     console.log("updates");
   }
-
-
-
-
 
 
   return (
@@ -77,15 +51,12 @@ export default function App() {
           onUpdate={updateOrbit}
         />
 
-        {/* <Frame></Frame> */}
-
         <pointLight position={[100, 100, 100]} intensity={1.2} />
         <hemisphereLight color="#ffffff" groundColor="#b9b9b9" position={[-7, 25, 5]} intensity={1} />
 
         <Suspense fallback={<Loader />}>
           <Model controls={controls} />
         </Suspense>
-
 
         <ContactShadows frames={1} position={[0, -520, 0]} scale={10000} blur={1} far={9000} />
       </Canvas>

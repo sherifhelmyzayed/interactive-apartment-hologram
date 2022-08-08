@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFrame } from "@react-three/fiber";
-import { useSpring, useSprings, animated, config, easings } from '@react-spring/three';
+import { useSpring, easings } from '@react-spring/three';
 import { Html } from '@react-three/drei';
 import { FaMapMarkerAlt } from 'react-icons/fa'
 import { FaTimesCircle } from 'react-icons/fa'
@@ -61,11 +61,6 @@ export function Model(props) {
       lookAtZ: (controls.current && exitApt) ? controls.current.target.z : null
     },
     to: {
-
-      // lookAtX: (selectedApt) ? controlTarget.x : 0,
-      // lookAtY: (selectedApt) ? controlTarget.y : 0,
-      // lookAtZ: (selectedApt) ? controlTarget.z : 0
-
       lookAtX: (exitApt) ? 0 : controlTarget.x,
       lookAtY: (exitApt) ? 0 : controlTarget.y,
       lookAtZ: (exitApt) ? 0 : controlTarget.z
@@ -83,17 +78,6 @@ export function Model(props) {
       maxDistance: (exitApt) ? 3500 : 1200,
     }
   })
-
-  // const polarAnimation = useSpring({
-  //   config: { duration: 2000, easing: easings.easeInOutCubic },
-  //   from: {
-  //     polarAngle: (controls.current) ? controls.current.getPolarAngle() : null
-  //   },
-  //   to: {
-  //     polarAngle: (controls.current) ? controls.current.setPolarAngle(0.5) : null
-
-  //   }
-  // });
 
 
   function Marker({ children, ...props }) {
@@ -115,11 +99,6 @@ export function Model(props) {
     setSelectedApt(null)
     setKey(null)
 
-    console.log(controls.current.target.x);
-
-    // setControlTarget(null)
-
-
     setControlTarget(new THREE.Vector3(0, 0, 0))
 
   }
@@ -138,7 +117,6 @@ export function Model(props) {
 
 
     useFrame(() => {
-
       if (controls.current && selectedApt) {
         controls.current.target.x = controlToTargetAnimation.lookAtX.animation.values[0]._value
         controls.current.target.y = controlToTargetAnimation.lookAtY.animation.values[0]._value
@@ -146,28 +124,17 @@ export function Model(props) {
 
         controls.current.minDistance = distanceToAnimation.minDistance.animation.values[0]._value;
         controls.current.maxDistance = distanceToAnimation.maxDistance.animation.values[0]._value;
-
-        // controls.current.setPolarAngle(polarAnimation.polarAngle.animation.values[0]._value)
-
-
       }
 
       if (controls.current && exitApt === true) {
-        // console.log(controlFromTargetAnimation.lookAtX.animation.values[0]._value);
         controls.current.target.x = controlFromTargetAnimation.lookAtX.animation.values[0]._value
         controls.current.target.y = controlFromTargetAnimation.lookAtY.animation.values[0]._value
         controls.current.target.z = controlFromTargetAnimation.lookAtZ.animation.values[0]._value
 
-        // console.log(controlFromTargetAnimation.lookAtX.animation.values[0]._value);
-
         controls.current.minDistance = distanceFromAnimation.minDistance.animation.values[0]._value;
         controls.current.maxDistance = distanceFromAnimation.maxDistance.animation.values[0]._value;
-
       }
-
-
     })
-
 
 
     return (
@@ -176,52 +143,36 @@ export function Model(props) {
           castShadow
           receiveShadow
           geometry={geometry}
-
           onPointerOver={e => {
-
             if (selectedApt === null) {
               e.stopPropagation();
               setHovered(true)
             }
           }}
           onPointerOut={e => {
-
             if (selectedApt === null) {
               e.stopPropagation();
               setHovered(false);
             }
           }}
-
           onDoubleClick={e => {
-
             e.stopPropagation();
-
             const newTarget = new THREE.Vector3(
               (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2 + geometry.boundingBox.min.x,
               -geometry.boundingBox.max.z - 250,
               (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
             )
-
             setControlTarget(newTarget)
             setSelectedApt(geometry.uuid)
             setKey(id)
-
-
             setExitApt(false)
-
-
-          }
-
-
-          }
+          }}
         >
           <meshStandardMaterial {...material} color={hovered ? "aquamarine" : "#d4d4d4"} />
         </mesh>
       ) : null
     )
   }
-
-
 
   return (
     <>
@@ -231,11 +182,9 @@ export function Model(props) {
             <Marker rotation={[0, Math.PI / 2, 0]} position={[controlTarget.x, controlTarget.y + 300, controlTarget.z]} scale={50}>
               Apartment no. {key}
               <FaTimesCircle style={{ color: 'red', cursor: 'pointer', width: '10px', marginLeft: 5 }} onClick={() => exitHandler()} />
-
             </Marker>
             <Marker rotation={[0, Math.PI / 2, 0]} position={[controlTarget.x, controlTarget.y + 150, controlTarget.z]} scale={100}>
               <FaMapMarkerAlt style={{ color: 'orange' }} />
-
             </Marker>
 
           </>
