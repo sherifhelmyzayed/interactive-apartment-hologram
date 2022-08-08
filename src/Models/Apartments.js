@@ -1,21 +1,14 @@
 import { useState } from 'react';
-import { useFrame } from "@react-three/fiber";
-import { useSpring, easings } from '@react-spring/three';
-import { Html } from '@react-three/drei';
-import { FaMapMarkerAlt } from 'react-icons/fa'
-import { FaTimesCircle } from 'react-icons/fa'
-
-
-import { useGLTF } from "@react-three/drei";
-
 import * as THREE from 'three'
-
+import { useFrame } from "@react-three/fiber";
+import { Html, useGLTF } from '@react-three/drei';
+import { useSpring, easings } from '@react-spring/three';
+import { FaMapMarkerAlt, FaTimesCircle } from 'react-icons/fa'
 
 
 export function Model(props) {
 
   const { controls } = props;
-
   const [controlTarget, setControlTarget] = useState(new THREE.Vector3(0, 0, 0))
   const [selectedApt, setSelectedApt] = useState(null);
   const [exitApt, setExitApt] = useState(false);
@@ -23,9 +16,6 @@ export function Model(props) {
 
   const { nodes, materials } = useGLTF("/apartments.glb");
   const arrayOfObj = Object.entries(nodes).map((mesh) => ({ mesh })).slice(3, 20);
-
-
-
 
   const controlToTargetAnimation = useSpring({
     config: { duration: 2000, easing: easings.easeInOutCubic },
@@ -98,23 +88,12 @@ export function Model(props) {
     setExitApt(true)
     setSelectedApt(null)
     setKey(null)
-
     setControlTarget(new THREE.Vector3(0, 0, 0))
-
   }
-
-
-
-
 
   const Apartment = (props) => {
     const [hovered, setHovered] = useState(false);
-
     const { geometry, material, id } = props;
-
-
-
-
 
     useFrame(() => {
       if (controls.current && selectedApt) {
@@ -135,7 +114,6 @@ export function Model(props) {
         controls.current.maxDistance = distanceFromAnimation.maxDistance.animation.values[0]._value;
       }
     })
-
 
     return (
       (!selectedApt || selectedApt === geometry.uuid) ? (
