@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import { useGLTF } from "@react-three/drei";
 
+import * as THREE from 'three'
+
 
 
 export function Model(props) {
+
+  const { controls } = props
 
   const { nodes, materials } = useGLTF("/apartments.glb");
   const arrayOfObj = Object.entries(nodes).map((mesh) => ({ mesh })).slice(3, 20);
@@ -32,7 +36,26 @@ export function Model(props) {
 
         onClick={e => {
           e.stopPropagation();
-          console.log(geometry.boundingSphere.center);
+
+          controls.current.setPolarAngle(0.5)
+
+          console.log(controls.current.zoom0);
+          controls.current.zoom0 = 5000
+          // controls.current.maxDistance = 1200;
+          // controls.current.minDistance = 1150;
+
+          // console.log(geometry.boundingBox.max.x);
+
+          controls.current.target = new THREE.Vector3(
+            (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2 + geometry.boundingBox.min.x,
+            -geometry.boundingBox.max.z,
+            (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
+          )
+
+          console.log(
+
+            
+          );
         }}
       >
         <meshStandardMaterial {...material} color={hovered ? "aquamarine" : "#d4d4d4"} />
@@ -57,7 +80,7 @@ export function Model(props) {
           {
             arrayOfObj.map(item => {
               return (
-                <Apartment geometry={item.mesh[1].geometry} material = {materials.GreyColor}/>
+                <Apartment geometry={item.mesh[1].geometry} material={materials.GreyColor} />
               )
             })
           }
