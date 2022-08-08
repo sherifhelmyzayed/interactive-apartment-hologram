@@ -61,7 +61,7 @@ export default function App() {
     <>
       <Canvas
         shadowMap camera={{ fov: 45, zoom: 1, near: 200, far: 20000, position: [0, 0, 3000], }} style={{ height: `100vh` }} >
-        <fog attach="fog" args={['#17171b', 1000, 6000]} />
+        <fog attach="fog" args={['#17171b', 100, 6000]} />
         <color attach="background" args={['#cdcdcd']} />
 
         <OrbitControls
@@ -80,14 +80,14 @@ export default function App() {
         {/* <Frame></Frame> */}
 
         <pointLight position={[100, 100, 100]} intensity={1.2} />
-        <hemisphereLight color="#ffffff" groundColor="#b9b9b9" position={[-7, 25, 13]} intensity={2} />
+        <hemisphereLight color="#ffffff" groundColor="#b9b9b9" position={[-7, 25, 5]} intensity={1} />
 
         <Suspense fallback={<Loader />}>
           <Model controls={controls} />
         </Suspense>
 
 
-        <ContactShadows frames={1} position={[0, -520, 0]} scale={10000} blur={2} far={9000} />
+        <ContactShadows frames={1} position={[0, -520, 0]} scale={10000} blur={1} far={9000} />
       </Canvas>
     </>
   );
