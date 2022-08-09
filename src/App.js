@@ -3,8 +3,6 @@ import { Canvas, extend } from "@react-three/fiber";
 import { OrbitControls, ContactShadows, useProgress, Html } from "@react-three/drei";
 import { Model } from "./Models/Apartments.js";
 
-// import B02 from "./Components/B02";
-// import B01 from "./Components/B01";
 
 extend({ OrbitControls });
 
