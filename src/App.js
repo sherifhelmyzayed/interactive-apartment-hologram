@@ -32,9 +32,9 @@ export default function App() {
   return (
     <>
       <Canvas
-        shadowMap camera={{ fov: 45, zoom: 1, near: 200, far: 20000, position: [0, 0, 3000], }} style={{ height: `100vh` }} >
-        <fog attach="fog" args={['#17171b', 100, 6000]} />
-        <color attach="background" args={['#cdcdcd']} />
+        shadowMap camera={{ fov: 45, zoom: 1, near: 200, far: 200000, position: [0, 0, 3000], }} style={{ height: `100vh` }} >
+        {/* <fog attach="fog" args={['#17171b', 100, 6000]} /> */}
+        <color attach="background" args={['#ffffff']} />
 
         <OrbitControls
           enablePan={true}
@@ -44,7 +44,7 @@ export default function App() {
           autoRotateSpeed={1}
           zoomSpeed={0.3}
           minDistance={2500}
-          maxDistance={3500}
+          maxDistance={10000}
           ref={controls}
           onUpdate={updateOrbit}
         />

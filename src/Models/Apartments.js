@@ -5,6 +5,7 @@ import { Html, useGLTF } from '@react-three/drei';
 import { useSpring, easings } from '@react-spring/three';
 import { FaMapMarkerAlt, FaTimesCircle } from 'react-icons/fa'
 import GLB from '../glb/apartments.glb'
+import { Env } from './Env.js'
 
 
 export function Model(props) {
@@ -195,6 +196,7 @@ export function Model(props) {
 
         </group>
       </group>
+      <Env />
 
     </>
   );
