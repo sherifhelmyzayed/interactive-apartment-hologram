@@ -4,6 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { Html, useGLTF } from '@react-three/drei';
 import { useSpring, easings } from '@react-spring/three';
 import { FaMapMarkerAlt, FaTimesCircle } from 'react-icons/fa'
+import GLB from '../glb/apartments.glb'
 
 
 export function Model(props) {
@@ -14,7 +15,7 @@ export function Model(props) {
   const [exitApt, setExitApt] = useState(false);
   const [key, setKey] = useState(null)
 
-  const { nodes, materials } = useGLTF("/apartments.glb");
+  const { nodes, materials } = useGLTF(GLB);
   const arrayOfObj = Object.entries(nodes).map((mesh) => ({ mesh })).slice(3, 20);
 
   const controlToTargetAnimation = useSpring({
@@ -199,4 +200,4 @@ export function Model(props) {
   );
 }
 
-useGLTF.preload("/apartments.glb");
+useGLTF.preload(GLB);
