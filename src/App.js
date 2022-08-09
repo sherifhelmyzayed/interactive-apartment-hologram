@@ -1,6 +1,6 @@
 import { useRef, Suspense } from "react";
 import { Canvas, extend } from "@react-three/fiber";
-import { OrbitControls, ContactShadows, useProgress, Html, Shadow, BakeShadows, RandomizedLight } from "@react-three/drei";
+import { OrbitControls, ContactShadows, useProgress, Html, Shadow, BakeShadows } from "@react-three/drei";
 import { Model } from "./Models/Apartments.js";
 
 
@@ -47,11 +47,10 @@ export default function App() {
           maxDistance={10000}
           ref={controls}
           onUpdate={updateOrbit}
+          maxPolarAngle={1.73}
         />
-        {/* <ambientLight /> */}
 
         <pointLight position={[1000, 1000, 1000]} intensity={.5} />
-        {/* <pointLight position={[-1000, 1000, -1000]} intensity={.5} /> */}
         <hemisphereLight color="#ffffff" groundColor="#000000" position={[-7, 15, 5]} intensity={.5} />
         <rectAreaLight
           width={2000}
@@ -81,7 +80,7 @@ export default function App() {
           color="black"
           colorStop={0}
           opacity={1}
-          fog={true} // Reacts to fog (default=false)
+          fog={true} 
         />
 
 
