@@ -1,4 +1,4 @@
-import { useRef, Suspense, useState, useEffect } from "react";
+import { useRef, Suspense } from "react";
 import { Canvas, extend } from "@react-three/fiber";
 import { OrbitControls, ContactShadows, useProgress, Html, Shadow, BakeShadows } from "@react-three/drei";
 import { Model } from "./Models/Apartments.js";
@@ -25,7 +25,6 @@ const Loader = () => {
 
 export default function App() {
 
-  const [landscape, setLandscape] = useState(false)
   const controls = useRef(null);
   const handle = useFullScreenHandle();
 
@@ -40,23 +39,6 @@ export default function App() {
       </FullScreen>
     </div>
   )
-
-
-
-
-  useEffect(() => {
-
-    console.log(window.innerWidth > window.innerHeight);
-  
-    return () => {
-      if (window.innerWidth > window.innerHeight) {
-    
-        setLandscape(true)
-      }
-    }
-  }, [window.innerWidth])
-  
-
 
   return (
     <>
