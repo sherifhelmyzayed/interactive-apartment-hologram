@@ -1,4 +1,4 @@
-import { useRef, Suspense } from "react";
+import { useRef, Suspense, useState, useEffect } from "react";
 import { Canvas, extend } from "@react-three/fiber";
 import { OrbitControls, ContactShadows, useProgress, Html, Shadow, BakeShadows } from "@react-three/drei";
 import { Model } from "./Models/Apartments.js";
@@ -25,6 +25,7 @@ const Loader = () => {
 
 export default function App() {
 
+  const [landscape, setLandscape] = useState(false)
   const controls = useRef(null);
   const handle = useFullScreenHandle();
 
@@ -43,6 +44,20 @@ export default function App() {
 
 
 
+  useEffect(() => {
+
+    console.log(window.innerWidth > window.innerHeight);
+  
+    return () => {
+      if (window.innerWidth > window.innerHeight) {
+    
+        setLandscape(true)
+      }
+    }
+  }, [window.innerWidth])
+  
+
+
   return (
     <>
       <RotatingModel />
@@ -59,7 +74,7 @@ export default function App() {
           autoRotate={false}
           autoRotateSpeed={1}
           zoomSpeed={0.3}
-          minDistance={2500}
+          minDistance={window.innerWidth > window.innerHeight ? 2500 : 5500}
           maxDistance={10000}
           ref={controls}
           maxPolarAngle={1.73}
@@ -99,7 +114,7 @@ export default function App() {
           fog={true}
         />
       <BakeShadows /> */}
-      <ContactShadows frames={1} position={[0, -520, 0]} scale={10000} blur={1} far={9000} />
+        <ContactShadows frames={1} position={[0, -520, 0]} scale={10000} blur={1} far={9000} />
 
       </Canvas>
     </>

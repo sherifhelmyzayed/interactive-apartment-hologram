@@ -50,9 +50,12 @@ export function Model(props) {
       minDistance: (controls.current) ? controls.current.minDistance : null,
       maxDistance: (controls.current) ? controls.current.maxDistance : null,
     },
+    // window.innerWidth > window.innerHeight ? 2500 : 5500
     to: {
-      minDistance: (selectedApt) ? 1200 : 2500,
-      maxDistance: (selectedApt) ? 1200 : 3500,
+      minDistance: (selectedApt) ? (window.innerWidth > window.innerHeight) ? 1200 : 2500 : (window.innerWidth > window.innerHeight) ? 2500 : 5500,
+      maxDistance: (selectedApt) ? (window.innerWidth > window.innerHeight) ? 1500 : 3500 : 10000,
+      // minDistance: (selectedApt) ? 1200 : 2500,
+      // maxDistance: (selectedApt) ? 1200 : 3500,
     }
   })
 
@@ -77,8 +80,8 @@ export function Model(props) {
       maxDistance: (controls.current && exitApt) ? controls.current.maxDistance + 0.1 : null,
     },
     to: {
-      minDistance: (exitApt) ? 2500 : 1200,
-      maxDistance: (exitApt) ? 3500 : 1200,
+      minDistance: (exitApt) ? (window.innerWidth > window.innerHeight) ? 2500 : 5500 : (window.innerWidth > window.innerHeight) ? 1200 : 2500,
+      maxDistance: (exitApt) ? 10000 : (window.innerWidth > window.innerHeight) ? 1500 : 3500,
     }
   })
 
