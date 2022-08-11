@@ -48,7 +48,7 @@ export default function App() {
       <RotatingModel />
 
       <Canvas
-        shadowMap camera={{ fov: 45, zoom: 1, near: 200, far: 200000, position: [0, 0, 3000], }} style={{ height: `100vh`, width: '100vw' }} >
+        camera={{ fov: 45, zoom: 1, near: 200, far: 200000, position: [0, 0, 3000], }} style={{ height: `100vh`, width: '100vw' }} >
         <fog attach="fog" args={['#17171b', 0, 100000]} />
         <color attach="background" args={['#ffffff']} />
 
@@ -65,8 +65,9 @@ export default function App() {
           maxPolarAngle={1.73}
         />
 
+        <hemisphereLight color="#00000" groundColor="#000000" position={[-7, 15, 5]} intensity={1} />
         <pointLight position={[1000, 1000, 1000]} intensity={.5} />
-        <hemisphereLight color="#ffffff" groundColor="#000000" position={[-7, 15, 5]} intensity={.5} /> 
+        {/* 
          <rectAreaLight
           width={2000}
           height={2000}
@@ -75,9 +76,9 @@ export default function App() {
           position={[-1000, 2000, -1000]}
           rotation={[180, .4, 0.3]}
           castShadow
-        /> 
+        />  */}
 
-        <rectAreaLight
+        {/* <rectAreaLight
           width={2000}
           height={2000}
           intensity={4}
@@ -85,20 +86,20 @@ export default function App() {
           position={[1000, 2000, -1000]}
           rotation={[180, .4, 0.3]}
           castShadow
-        />
+        /> */}
 
         <Suspense fallback={<Loader />}>
           <Model controls={controls} />
         </Suspense>
 
-        <Shadow
+        {/* <Shadow
           color="black"
           colorStop={0}
           opacity={1}
           fog={true}
         />
-        <ContactShadows frames={1} position={[0, -520, 0]} scale={10000} blur={1} far={9000} />
-        <BakeShadows />
+      <BakeShadows /> */}
+      <ContactShadows frames={1} position={[0, -520, 0]} scale={10000} blur={1} far={9000} />
 
       </Canvas>
     </>
