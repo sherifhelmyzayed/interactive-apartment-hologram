@@ -41,9 +41,6 @@ export default function App() {
   )
 
 
-  const updateOrbit = () => {
-    console.log("updates");
-  }
 
 
   return (
@@ -65,13 +62,12 @@ export default function App() {
           minDistance={2500}
           maxDistance={10000}
           ref={controls}
-          onUpdate={updateOrbit}
           maxPolarAngle={1.73}
         />
 
         <pointLight position={[1000, 1000, 1000]} intensity={.5} />
-        <hemisphereLight color="#ffffff" groundColor="#000000" position={[-7, 15, 5]} intensity={.5} />
-        <rectAreaLight
+        <hemisphereLight color="#ffffff" groundColor="#000000" position={[-7, 15, 5]} intensity={.5} /> 
+         <rectAreaLight
           width={2000}
           height={2000}
           intensity={4}
@@ -79,7 +75,7 @@ export default function App() {
           position={[-1000, 2000, -1000]}
           rotation={[180, .4, 0.3]}
           castShadow
-        />
+        /> 
 
         <rectAreaLight
           width={2000}
@@ -101,11 +97,9 @@ export default function App() {
           opacity={1}
           fog={true}
         />
-
-
-
         <ContactShadows frames={1} position={[0, -520, 0]} scale={10000} blur={1} far={9000} />
         <BakeShadows />
+
       </Canvas>
     </>
   );

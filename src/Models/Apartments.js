@@ -1,21 +1,31 @@
 import { useState } from 'react';
-import * as THREE from 'three'
+import * as THREE from 'three';
 import { useFrame } from "@react-three/fiber";
 import { Html, useGLTF } from '@react-three/drei';
 import { useSpring, easings } from '@react-spring/three';
-import { FaMapMarkerAlt, FaTimesCircle } from 'react-icons/fa'
-import GLB from '../glb/apartments.glb'
-import { Env } from './Env.js'
-import RotatingModel from '../Components/RotatingModel/RotatingModel';
+import { FaMapMarkerAlt, FaTimesCircle } from 'react-icons/fa';
+import GLB from '../glb/apartments.glb';
+import { Env } from './Env.js';
 
 
 export function Model(props) {
 
   const { controls } = props;
-  const [controlTarget, setControlTarget] = useState(new THREE.Vector3(0, 0, 0))
+  const [controlTarget, setControlTarget] = useState(new THREE.Vector3(0, 0, 0));
+  const [hovered, setHovered] = useState(null);
   const [selectedApt, setSelectedApt] = useState(null);
   const [exitApt, setExitApt] = useState(false);
   const [key, setKey] = useState(null)
+  const [floor, setFloor] = useState(null)
+
+  const floorRef = [
+    [0, 1, 8, 9],
+    [10, 11, 12, 13],
+    [2, 3, 14, 15],
+    [4, 5, 6, 7]
+  ]
+
+  console.log("renders");
 
   const { nodes, materials } = useGLTF(GLB);
   const arrayOfObj = Object.entries(nodes).map((mesh) => ({ mesh })).slice(3, 20);
@@ -95,8 +105,13 @@ export function Model(props) {
   }
 
   const Apartment = (props) => {
-    const [hovered, setHovered] = useState(false);
+    // const [floorMode, setFloorMode] = useState(false)
     const { geometry, material, id } = props;
+
+    const floorSet = (id) => {
+      setFloor(floorRef.filter(item => item.includes(id))[0]);
+      // setFloorMode(floor.includes(id) && selectedApt !== geometry.uuid);
+    }
 
     useFrame(() => {
       if (controls.current && selectedApt) {
@@ -119,29 +134,29 @@ export function Model(props) {
     })
 
     return (
-      (!selectedApt || selectedApt === geometry.uuid) ? (
+      (!selectedApt || selectedApt === geometry.uuid || floor.includes(id)) ? (
         <mesh
           castShadow
           receiveShadow
           geometry={geometry}
-          onPointerOver={e => {
-            if (selectedApt === null) {
-              e.stopPropagation();
-              setHovered(true)
-            }
-          }}
+          // onPointerOver={e => {
+          //   if (selectedApt === null) {
+          //     e.stopPropagation();
+          //     setHovered(id)
+          //   }
+          // }}
           onClick={e => {
             if (selectedApt === null) {
               e.stopPropagation();
-              setHovered(true)
+              setHovered(id)
             }
           }}
-          onPointerOut={e => {
-            if (selectedApt === null) {
-              e.stopPropagation();
-              setHovered(false);
-            }
-          }}
+          // onPointerOut={e => {
+          //   if (selectedApt === null) {
+          //     e.stopPropagation();
+          //     setHovered(null);
+          //   }
+          // }}
           onDoubleClick={e => {
             e.stopPropagation();
             const newTarget = new THREE.Vector3(
@@ -153,14 +168,23 @@ export function Model(props) {
             setSelectedApt(geometry.uuid)
             setKey(id)
             setExitApt(false)
+            floorSet(id)
+            setHovered(null)
           }}
         >
-          <meshStandardMaterial {...material} color={hovered ? "aquamarine" : "#d4d4d4"} />
+          <meshStandardMaterial {...material} color={hovered === id ? "aquamarine" : (selectedApt === geometry.uuid) ? "#d4d4d4" : "#ababab"} transparent opacity={
+            (!selectedApt)
+              ? 1
+              : (selectedApt === geometry.uuid) ? 1 : .6
+            // 
+            } />
         </mesh>
       ) : null
     )
   }
 
+
+  // return whole model
   return (
     <>
       {
@@ -203,8 +227,9 @@ export function Model(props) {
 
         </group>
       </group>
-      <Env />
-
+      {
+        (selectedApt) ? null : <Env />
+      }
     </>
   );
 }

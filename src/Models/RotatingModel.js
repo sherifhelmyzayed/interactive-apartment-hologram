@@ -1,5 +1,5 @@
 import { useGLTF } from '@react-three/drei';
-import GLB from '../glb/apartments.glb'
+import GLB from '../glb/apartments.glb';
 
 
 export function RotatingModel(props) {
@@ -9,8 +9,6 @@ export function RotatingModel(props) {
         const { geometry } = props
         return (
             <mesh
-                castShadow
-                receiveShadow
                 geometry={geometry}
             >
                 <meshStandardMaterial color={"#d4d4d4"} />

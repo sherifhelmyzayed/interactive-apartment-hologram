@@ -24,10 +24,10 @@ const RotatingModelViewer = () => {
         <fog attach="fog" args={['#17171b', 0, 100000]} />
 
         <OrbitControls
-          enablePan={true}
-          enableZoom={true}
-          enableRotate={true}
-          autoRotate={false}
+          enablePan={false}
+          enableZoom={false}
+          enableRotate={false}
+          autoRotate={true}
           autoRotateSpeed={1}
           zoomSpeed={0.3}
           minDistance={2500}
@@ -37,19 +37,9 @@ const RotatingModelViewer = () => {
 
         <pointLight position={[1000, 1000, 1000]} intensity={.5} />
         <hemisphereLight color="#ffffff" groundColor="#000000" position={[-7, 15, 5]} intensity={.5} />
-        <rectAreaLight
-          width={2000}
-          height={2000}
-          intensity={4}
-          color={'white'}
-          position={[-1000, 2000, -1000]}
-          rotation={[180, .4, 0.3]}
-          castShadow
-        />
 
-        <Suspense fallback={<Loader />}>
+
           <RotatingModel/>
-        </Suspense>
 
       </Canvas>
     </FixedDiv >
