@@ -2,6 +2,9 @@ import { useRef, Suspense } from "react";
 import { Canvas, extend } from "@react-three/fiber";
 import { OrbitControls, ContactShadows, useProgress, Html, Shadow, BakeShadows } from "@react-three/drei";
 import { Model } from "./Models/Apartments.js";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import RotatingModel from "./Components/RotatingModel/RotatingModel.js";
+
 
 
 extend({ OrbitControls });
@@ -23,6 +26,20 @@ const Loader = () => {
 export default function App() {
 
   const controls = useRef(null);
+  const handle = useFullScreenHandle();
+
+  const FullScreenButton = () => (
+    <div>
+      <button onClick={handle.enter}>
+        Enter fullscreen
+      </button>
+
+      <FullScreen handle={handle}>
+        Any fullscreen content here
+      </FullScreen>
+    </div>
+  )
+
 
   const updateOrbit = () => {
     console.log("updates");
@@ -31,8 +48,10 @@ export default function App() {
 
   return (
     <>
+      <RotatingModel />
+
       <Canvas
-        shadowMap camera={{ fov: 45, zoom: 1, near: 200, far: 200000, position: [0, 0, 3000], }} style={{ height: `100vh` }} >
+        shadowMap camera={{ fov: 45, zoom: 1, near: 200, far: 200000, position: [0, 0, 3000], }} style={{ height: `100vh`, width: '100vw' }} >
         <fog attach="fog" args={['#17171b', 0, 100000]} />
         <color attach="background" args={['#ffffff']} />
 
@@ -80,7 +99,7 @@ export default function App() {
           color="black"
           colorStop={0}
           opacity={1}
-          fog={true} 
+          fog={true}
         />
 
 

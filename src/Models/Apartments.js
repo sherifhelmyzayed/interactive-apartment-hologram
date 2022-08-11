@@ -6,6 +6,7 @@ import { useSpring, easings } from '@react-spring/three';
 import { FaMapMarkerAlt, FaTimesCircle } from 'react-icons/fa'
 import GLB from '../glb/apartments.glb'
 import { Env } from './Env.js'
+import RotatingModel from '../Components/RotatingModel/RotatingModel';
 
 
 export function Model(props) {
@@ -124,6 +125,12 @@ export function Model(props) {
           receiveShadow
           geometry={geometry}
           onPointerOver={e => {
+            if (selectedApt === null) {
+              e.stopPropagation();
+              setHovered(true)
+            }
+          }}
+          onClick={e => {
             if (selectedApt === null) {
               e.stopPropagation();
               setHovered(true)
