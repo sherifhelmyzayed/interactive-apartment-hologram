@@ -1,6 +1,6 @@
 import { useRef, Suspense, useState, createContext } from "react";
 import { Canvas, extend } from "@react-three/fiber";
-import { OrbitControls, ContactShadows, useProgress, Html, Shadow, BakeShadows } from "@react-three/drei";
+import { OrbitControls, ContactShadows, useProgress, Html } from "@react-three/drei";
 import { Model } from "./Models/Apartments.js";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import RotatingModel from "./Components/RotatingModel/RotatingModel.js";
@@ -52,7 +52,7 @@ export default function App() {
 
   return (
     <HandlerContext.Provider value={val}>
-      <RotatingModel selectedApt={selectedApt} setSelectedApt={setSelectedApt}/>
+      <RotatingModel selectedApt={selectedApt} setSelectedApt={setSelectedApt} />
       <Canvas
         camera={{ fov: 45, zoom: 1, near: 200, far: 200000, position: [0, 400, 4000], }} style={{ height: `100vh`, width: '100vw' }} >
         <fog attach="fog" args={['#17171b', 0, 100000]} />
@@ -69,31 +69,11 @@ export default function App() {
           minDistance={0}
           maxDistance={10000}
           ref={controls}
-        // maxPolarAngle={1.73}
+          maxPolarAngle={1.73}
         />
 
         <hemisphereLight color="#00000" groundColor="#000000" position={[-7, 15, 5]} intensity={1} />
         <pointLight position={[1000, 1000, 1000]} intensity={.5} />
-        {/* 
-         <rectAreaLight
-          width={2000}
-          height={2000}
-          intensity={4}
-          color={'white'}
-          position={[-1000, 2000, -1000]}
-          rotation={[180, .4, 0.3]}
-          castShadow
-        />  */}
-
-        {/* <rectAreaLight
-          width={2000}
-          height={2000}
-          intensity={4}
-          color={'white'}
-          position={[1000, 2000, -1000]}
-          rotation={[180, .4, 0.3]}
-          castShadow
-        /> */}
 
         <Suspense fallback={<Loader />}>
           <Model controls={controls} selectedApt={selectedApt} setSelectedApt={setSelectedApt}

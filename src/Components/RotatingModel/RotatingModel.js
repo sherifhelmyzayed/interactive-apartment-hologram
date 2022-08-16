@@ -2,18 +2,11 @@ import { Canvas, } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { FixedDiv } from './RotatingModelElements.js';
 import { RotatingModel } from "../../Models/RotatingModel.js";
-import { useContext } from "react";
-import {HandlerContext} from '../../App'
 
 
 const RotatingModelViewer = (props) => {
 
   const {selectedApt, setSelectedApt} = props
-
-  const value = useContext(HandlerContext);
-  value.test = "test";
-
-  console.log(value);
 
   const clickHandler = ()=> {
     setSelectedApt(false)

@@ -1,20 +1,17 @@
-import { useState, useContext, useRef } from 'react';
+import { useState } from 'react';
 import * as THREE from 'three';
-import { context, useFrame, useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Html, useGLTF } from '@react-three/drei';
 import { useSpring, easings } from '@react-spring/three';
 import { FaMapMarkerAlt, FaTimesCircle } from 'react-icons/fa';
 import GLB from '../glb/apartments.glb';
 import { Env } from './Env.js';
-import { HandlerContext } from '../App'
 
 
 
 export function Model(props) {
 
-  const three = useThree()
-  const content = useContext(HandlerContext);
-
+  const three = useThree();
 
   const { controls, setSelectedApt, selectedApt } = props;
 
@@ -24,17 +21,17 @@ export function Model(props) {
   const [hovered, setHovered] = useState(null);
 
   const [exitApt, setExitApt] = useState(false);
-  const [key, setKey] = useState(null)
-  const [floor, setFloor] = useState(null)
+  const [key, setKey] = useState(null);
+  const [floor, setFloor] = useState(null);
 
   const floorRef = [
     [0, 1, 8, 9],
     [10, 11, 12, 13],
     [2, 3, 14, 15],
     [4, 5, 6, 7]
-  ]
+  ];
 
-  const unAvailable = [0, 3, 9, 12, 13]
+  const unAvailable = [0, 3, 9, 12, 13];
 
   const { nodes, materials } = useGLTF(GLB);
   const arrayOfObj = Object.entries(nodes).map((mesh) => ({ mesh })).slice(3, 20);
@@ -47,8 +44,7 @@ export function Model(props) {
       lookAtZ: (controls.current) ? controls.current.target.z : 0,
       positionX: three.camera.position.x,
       positionY: three.camera.position.y,
-      positionZ: three.camera.position.z,
-      height: 0
+      positionZ: three.camera.position.z
     },
     to: {
       lookAtX: (controlTarget) ? controlTarget.x : 0,
@@ -56,8 +52,7 @@ export function Model(props) {
       lookAtZ: (controlTarget) ? controlTarget.z : 0,
       positionX: positionTarget.x,
       positionY: positionTarget.y,
-      positionZ: positionTarget.z,
-      height: -100
+      positionZ: positionTarget.z
     },
     onRest: () => {
       controls.current.enableRotate = true
@@ -109,19 +104,18 @@ export function Model(props) {
   const exitHandler = () => {
     controls.current.enableRotate = true
     const positionTargetnew = new THREE.Vector3(
-      (4000 * Math.sin(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+      (5000 * Math.sin(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
       (400),
-      (4000 * Math.cos(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+      (5000 * Math.cos(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
     )
+    controls.current.enableRotate = false;
     setPositionTarget(positionTargetnew)
     setExitApt(true)
     setSelectedApt(null)
     setKey(null)
     setControlTarget(new THREE.Vector3(0, 0, 0))
-  }
+  };
 
-  context.state = selectedApt
-  context.setState = setSelectedApt
 
   const Apartment = (props) => {
     const { geometry, material, id } = props;
@@ -132,22 +126,22 @@ export function Model(props) {
 
     useFrame(() => {
       if (controlToTargetAnimation.lookAtX.animation.changed) {
-        controls.current.target.x = controlToTargetAnimation.lookAtX.animation.values[0]._value
-        controls.current.target.y = controlToTargetAnimation.lookAtY.animation.values[0]._value
-        controls.current.target.z = controlToTargetAnimation.lookAtZ.animation.values[0]._value
+        controls.current.target.x = controlToTargetAnimation.lookAtX.animation.values[0]._value;
+        controls.current.target.y = controlToTargetAnimation.lookAtY.animation.values[0]._value;
+        controls.current.target.z = controlToTargetAnimation.lookAtZ.animation.values[0]._value;
 
-        three.camera.position.x = controlToTargetAnimation.positionX.animation.values[0]._value
-        three.camera.position.y = controlToTargetAnimation.positionY.animation.values[0]._value
-        three.camera.position.z = controlToTargetAnimation.positionZ.animation.values[0]._value
+        three.camera.position.x = controlToTargetAnimation.positionX.animation.values[0]._value;
+        three.camera.position.y = controlToTargetAnimation.positionY.animation.values[0]._value;
+        three.camera.position.z = controlToTargetAnimation.positionZ.animation.values[0]._value;
       }
       if (controls.current && exitApt === true) {
-        controls.current.target.x = controlFromTargetAnimation.lookAtX.animation.values[0]._value
-        controls.current.target.y = controlFromTargetAnimation.lookAtY.animation.values[0]._value
-        controls.current.target.z = controlFromTargetAnimation.lookAtZ.animation.values[0]._value
+        controls.current.target.x = controlFromTargetAnimation.lookAtX.animation.values[0]._value;
+        controls.current.target.y = controlFromTargetAnimation.lookAtY.animation.values[0]._value;
+        controls.current.target.z = controlFromTargetAnimation.lookAtZ.animation.values[0]._value;
 
-        three.camera.position.x = controlFromTargetAnimation.positionX.animation.values[0]._value
-        three.camera.position.y = controlFromTargetAnimation.positionY.animation.values[0]._value
-        three.camera.position.z = controlFromTargetAnimation.positionZ.animation.values[0]._value
+        three.camera.position.x = controlFromTargetAnimation.positionX.animation.values[0]._value;
+        three.camera.position.y = controlFromTargetAnimation.positionY.animation.values[0]._value;
+        three.camera.position.z = controlFromTargetAnimation.positionZ.animation.values[0]._value;
       }
     })
 
@@ -157,7 +151,6 @@ export function Model(props) {
           castShadow
           receiveShadow
           geometry={geometry}
-
           onClick={e => {
             if (selectedApt === null) {
               e.stopPropagation();
@@ -173,17 +166,14 @@ export function Model(props) {
                 -geometry.boundingBox.max.z - 250,
                 (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
               )
-
               let distance = controls.current.object.position.distanceTo(controls.current.target)
               if (distance > 1600) distance = 1600
               if (distance < 1200) distance = 1200
-
               const positionTargetnew = new THREE.Vector3(
                 (newTarget.x + distance * Math.sin(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
                 (newTarget.y + distance * Math.sin(controls.current.getPolarAngle())),
                 (newTarget.z + distance * Math.cos(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
               )
-
               setControlTarget(newTarget)
               setPositionTarget(positionTargetnew)
               setSelectedApt(id)
@@ -215,7 +205,6 @@ export function Model(props) {
     )
   }
 
-
   // return whole model
   return (
     <>
@@ -229,7 +218,6 @@ export function Model(props) {
             <Marker rotation={[0, Math.PI / 2, 0]} position={[controlTarget.x, controlTarget.y + 150, controlTarget.z]} scale={100}>
               <FaMapMarkerAlt style={{ color: 'orange' }} />
             </Marker>
-
           </>
         ) : null
       }
@@ -256,7 +244,6 @@ export function Model(props) {
               )
             })
           }
-
         </group>
       </group>
       <Env selectedApt={selectedApt} />
