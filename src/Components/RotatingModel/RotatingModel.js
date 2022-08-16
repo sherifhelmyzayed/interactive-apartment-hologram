@@ -2,13 +2,25 @@ import { Canvas, } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { FixedDiv } from './RotatingModelElements.js';
 import { RotatingModel } from "../../Models/RotatingModel.js";
+import { useContext } from "react";
+import {HandlerContext} from '../../App'
 
 
+const RotatingModelViewer = (props) => {
 
-const RotatingModelViewer = () => {
+  const {selectedApt, setSelectedApt} = props
+
+  const value = useContext(HandlerContext);
+  value.test = "test";
+
+  console.log(value);
+
+  const clickHandler = ()=> {
+    setSelectedApt(false)
+  }
 
   return (
-    <FixedDiv>
+    <FixedDiv show={!selectedApt}>
       <Canvas
         camera={{ fov: 45, zoom: 1, near: 200, far: 200000, position: [0, 0, 3000], }} style={{ height: `100%`, width: '100%' }} >
         <fog attach="fog" args={['#17171b', 0, 100000]} />
@@ -28,7 +40,7 @@ const RotatingModelViewer = () => {
         <hemisphereLight color="#ffffff" groundColor="#000000" position={[-7, 15, 5]} intensity={.9} />
 
 
-        <RotatingModel />
+        <RotatingModel onClick={()=>clickHandler()}/>
 
       </Canvas>
     </FixedDiv >

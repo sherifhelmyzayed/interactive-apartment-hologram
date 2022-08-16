@@ -1,19 +1,28 @@
-import { useState } from 'react';
+import { useState, useContext, useRef } from 'react';
 import * as THREE from 'three';
-import { useFrame } from "@react-three/fiber";
+import { context, useFrame, useThree } from "@react-three/fiber";
 import { Html, useGLTF } from '@react-three/drei';
 import { useSpring, easings } from '@react-spring/three';
 import { FaMapMarkerAlt, FaTimesCircle } from 'react-icons/fa';
 import GLB from '../glb/apartments.glb';
 import { Env } from './Env.js';
+import { HandlerContext } from '../App'
+
 
 
 export function Model(props) {
 
-  const { controls } = props;
+  const three = useThree()
+  const content = useContext(HandlerContext);
+
+
+  const { controls, setSelectedApt, selectedApt } = props;
+
   const [controlTarget, setControlTarget] = useState(new THREE.Vector3(0, 0, 0));
+  const [positionTarget, setPositionTarget] = useState(new THREE.Vector3(0, 0, 0));
+
   const [hovered, setHovered] = useState(null);
-  const [selectedApt, setSelectedApt] = useState(null);
+
   const [exitApt, setExitApt] = useState(false);
   const [key, setKey] = useState(null)
   const [floor, setFloor] = useState(null)
@@ -25,67 +34,62 @@ export function Model(props) {
     [4, 5, 6, 7]
   ]
 
-  const unAvailable = [1, 3, 9, 12, 13]
-
-  console.log("renders");
+  const unAvailable = [0, 3, 9, 12, 13]
 
   const { nodes, materials } = useGLTF(GLB);
   const arrayOfObj = Object.entries(nodes).map((mesh) => ({ mesh })).slice(3, 20);
 
   const controlToTargetAnimation = useSpring({
-    config: { duration: 2000, easing: easings.easeInOutCubic },
+    config: { duration: 1500, easing: easings.easeInOutExpo },
     from: {
-      lookAtX: (controls.current) ? controls.current.target.x : null,
-      lookAtY: (controls.current) ? controls.current.target.y : null,
-      lookAtZ: (controls.current) ? controls.current.target.z : null
+      lookAtX: (controls.current) ? controls.current.target.x : 0,
+      lookAtY: (controls.current) ? controls.current.target.y : 0,
+      lookAtZ: (controls.current) ? controls.current.target.z : 0,
+      positionX: three.camera.position.x,
+      positionY: three.camera.position.y,
+      positionZ: three.camera.position.z,
+      height: 0
     },
     to: {
-      lookAtX: (selectedApt) ? controlTarget.x : 0,
-      lookAtY: (selectedApt) ? controlTarget.y : 0,
-      lookAtZ: (selectedApt) ? controlTarget.z : 0
-    }
+      lookAtX: (controlTarget) ? controlTarget.x : 0,
+      lookAtY: (controlTarget) ? controlTarget.y : 0,
+      lookAtZ: (controlTarget) ? controlTarget.z : 0,
+      positionX: positionTarget.x,
+      positionY: positionTarget.y,
+      positionZ: positionTarget.z,
+      height: -100
+    },
+    onRest: () => {
+      controls.current.enableRotate = true
+    },
+    reset: true
   });
-
-  const distanceToAnimation = useSpring({
-    config: { duration: 2000, easing: easings.easeInOutCubic, delay: 1000 },
-    from: {
-      minDistance: (controls.current) ? controls.current.minDistance : null,
-      maxDistance: (controls.current) ? controls.current.maxDistance : null,
-    },
-    // window.innerWidth > window.innerHeight ? 2500 : 5500
-    to: {
-      minDistance: (selectedApt) ? (window.innerWidth > window.innerHeight) ? 1200 : 2500 : (window.innerWidth > window.innerHeight) ? 2500 : 5500,
-      maxDistance: (selectedApt) ? (window.innerWidth > window.innerHeight) ? 1500 : 3500 : 10000,
-      // minDistance: (selectedApt) ? 1200 : 2500,
-      // maxDistance: (selectedApt) ? 1200 : 3500,
-    }
-  })
 
   const controlFromTargetAnimation = useSpring({
     config: { duration: 1000, easing: easings.easeInOutCubic },
     from: {
       lookAtX: (controls.current && exitApt) ? controls.current.target.x : null,
       lookAtY: (controls.current && exitApt) ? controls.current.target.y : null,
-      lookAtZ: (controls.current && exitApt) ? controls.current.target.z : null
+      lookAtZ: (controls.current && exitApt) ? controls.current.target.z : null,
+      positionX: three.camera.position.x,
+      positionY: three.camera.position.y,
+      positionZ: three.camera.position.z
     },
     to: {
       lookAtX: (exitApt) ? 0 : controlTarget.x,
       lookAtY: (exitApt) ? 0 : controlTarget.y,
-      lookAtZ: (exitApt) ? 0 : controlTarget.z
-    }
+      lookAtZ: (exitApt) ? 0 : controlTarget.z,
+      positionX: positionTarget.x,
+      positionY: positionTarget.y,
+      positionZ: positionTarget.z
+    },
+    onRest: () => {
+      setExitApt(false);
+      controls.current.enableRotate = true;
+    },
+    reset: true
   });
 
-  const distanceFromAnimation = useSpring({
-    config: { duration: 1000, easing: easings.easeInOutCubic },
-    from: {
-      minDistance: (controls.current && exitApt) ? controls.current.minDistance + 0.1 : null,
-      maxDistance: (controls.current && exitApt) ? controls.current.maxDistance + 0.1 : null,
-    },
-    to: {
-      minDistance: (exitApt) ? (window.innerWidth > window.innerHeight) ? 2500 : 5500 : (window.innerWidth > window.innerHeight) ? 1200 : 2500,
-      maxDistance: (exitApt) ? 10000 : (window.innerWidth > window.innerHeight) ? 1500 : 3500,
-    }
-  })
 
 
   function Marker({ children, ...props }) {
@@ -103,38 +107,47 @@ export function Model(props) {
   }
 
   const exitHandler = () => {
+    controls.current.enableRotate = true
+    const positionTargetnew = new THREE.Vector3(
+      (4000 * Math.sin(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+      (400),
+      (4000 * Math.cos(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+    )
+    setPositionTarget(positionTargetnew)
     setExitApt(true)
     setSelectedApt(null)
     setKey(null)
     setControlTarget(new THREE.Vector3(0, 0, 0))
   }
 
+  context.state = selectedApt
+  context.setState = setSelectedApt
+
   const Apartment = (props) => {
-    // const [floorMode, setFloorMode] = useState(false)
     const { geometry, material, id } = props;
 
     const floorSet = (id) => {
       setFloor(floorRef.filter(item => item.includes(id))[0]);
-      // setFloorMode(floor.includes(id) && selectedApt !== geometry.uuid);
     }
 
     useFrame(() => {
-      if (controls.current && selectedApt) {
+      if (controlToTargetAnimation.lookAtX.animation.changed) {
         controls.current.target.x = controlToTargetAnimation.lookAtX.animation.values[0]._value
         controls.current.target.y = controlToTargetAnimation.lookAtY.animation.values[0]._value
         controls.current.target.z = controlToTargetAnimation.lookAtZ.animation.values[0]._value
 
-        controls.current.minDistance = distanceToAnimation.minDistance.animation.values[0]._value;
-        controls.current.maxDistance = distanceToAnimation.maxDistance.animation.values[0]._value;
+        three.camera.position.x = controlToTargetAnimation.positionX.animation.values[0]._value
+        three.camera.position.y = controlToTargetAnimation.positionY.animation.values[0]._value
+        three.camera.position.z = controlToTargetAnimation.positionZ.animation.values[0]._value
       }
-
       if (controls.current && exitApt === true) {
         controls.current.target.x = controlFromTargetAnimation.lookAtX.animation.values[0]._value
         controls.current.target.y = controlFromTargetAnimation.lookAtY.animation.values[0]._value
         controls.current.target.z = controlFromTargetAnimation.lookAtZ.animation.values[0]._value
 
-        controls.current.minDistance = distanceFromAnimation.minDistance.animation.values[0]._value;
-        controls.current.maxDistance = distanceFromAnimation.maxDistance.animation.values[0]._value;
+        three.camera.position.x = controlFromTargetAnimation.positionX.animation.values[0]._value
+        three.camera.position.y = controlFromTargetAnimation.positionY.animation.values[0]._value
+        three.camera.position.z = controlFromTargetAnimation.positionZ.animation.values[0]._value
       }
     })
 
@@ -144,33 +157,35 @@ export function Model(props) {
           castShadow
           receiveShadow
           geometry={geometry}
-          // onPointerOver={e => {
-          //   if (selectedApt === null) {
-          //     e.stopPropagation();
-          //     setHovered(id)
-          //   }
-          // }}
+
           onClick={e => {
             if (selectedApt === null) {
               e.stopPropagation();
-              setHovered(id)
+              setHovered(id);
             }
           }}
-          // onPointerOut={e => {
-          //   if (selectedApt === null) {
-          //     e.stopPropagation();
-          //     setHovered(null);
-          //   }
-          // }}
           onDoubleClick={e => {
+            e.stopPropagation();
             if (!unAvailable.includes(id)) {
-              e.stopPropagation();
+              controls.current.enableRotate = false
               const newTarget = new THREE.Vector3(
                 (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2 + geometry.boundingBox.min.x,
                 -geometry.boundingBox.max.z - 250,
                 (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
               )
+
+              let distance = controls.current.object.position.distanceTo(controls.current.target)
+              if (distance > 1600) distance = 1600
+              if (distance < 1200) distance = 1200
+
+              const positionTargetnew = new THREE.Vector3(
+                (newTarget.x + distance * Math.sin(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+                (newTarget.y + distance * Math.sin(controls.current.getPolarAngle())),
+                (newTarget.z + distance * Math.cos(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+              )
+
               setControlTarget(newTarget)
+              setPositionTarget(positionTargetnew)
               setSelectedApt(id)
               setKey(id)
               setExitApt(false)
@@ -244,9 +259,7 @@ export function Model(props) {
 
         </group>
       </group>
-      {
-        (selectedApt) ? null : <Env />
-      }
+      <Env selectedApt={selectedApt} />
     </>
   );
 }
