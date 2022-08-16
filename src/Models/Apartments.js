@@ -94,7 +94,7 @@ export function Model(props) {
         transform
         sprite
         occlude
-        style={{ transition: 'all 0.2s', opacity: 1, transform: `scale(2)` }}
+        style={{ transition: 'all 0.2s', opacity: 1, transform: `scale(2)`, userSelect: 'none' }}
         {...props}>
         {children}
       </Html>
@@ -146,64 +146,86 @@ export function Model(props) {
     })
 
     return (
-      (!selectedApt || selectedApt === id || floor.includes(id)) ? (
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={geometry}
-          onClick={e => {
-            if (selectedApt === null) {
-              e.stopPropagation();
-              setHovered(id);
-            }
-          }}
-          onDoubleClick={e => {
-            e.stopPropagation();
-            if (!unAvailable.includes(id)) {
+      <>{
+
+        (!selectedApt || selectedApt === id || floor.includes(id)) ? (
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={geometry}
+            onClick={e => {
+              if (selectedApt === null) {
+                e.stopPropagation();
+                setHovered(id);
+              }
+            }}
+            onDoubleClick={e => {
               controls.current.enableRotate = false
-              const newTarget = new THREE.Vector3(
-                (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2 + geometry.boundingBox.min.x,
-                -geometry.boundingBox.max.z - 250,
-                (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
-              )
-              let distance = controls.current.object.position.distanceTo(controls.current.target)
-              if (distance > 1600) distance = 1600
-              if (distance < 1200) distance = 1200
-              const positionTargetnew = new THREE.Vector3(
-                (newTarget.x + distance * Math.sin(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
-                (newTarget.y + distance * Math.sin(controls.current.getPolarAngle())),
-                (newTarget.z + distance * Math.cos(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
-              )
-              setControlTarget(newTarget)
-              setPositionTarget(positionTargetnew)
-              setSelectedApt(id)
-              setKey(id)
-              setExitApt(false)
-              floorSet(id)
-              setHovered(null)
-            }
-          }}
-        >
-          <meshStandardMaterial {...material} color={
-            hovered === id
-              ? !unAvailable.includes(id)
-                ? "aquamarine"
-                : "red"
-              : (selectedApt === id)
-                ? "#d4d4d4"
-                : unAvailable.includes(id) && selectedApt
-                  ? "red"
-                  : "#ababab"
-          } transparent opacity={
-            (!selectedApt)
-              ? 1
-              : (selectedApt === id) ? 1 : .6
-            // 
-          } />
-        </mesh>
-      ) : null
+              e.stopPropagation();
+              if (!unAvailable.includes(id)) {
+                controls.current.enableRotate = false
+                const newTarget = new THREE.Vector3(
+                  (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2 + geometry.boundingBox.min.x,
+                  -geometry.boundingBox.max.z - 250,
+                  (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
+                )
+                let distance = controls.current.object.position.distanceTo(controls.current.target)
+                if (distance > 1600) distance = 1600
+                if (distance < 1200) distance = 1200
+                const positionTargetnew = new THREE.Vector3(
+                  (newTarget.x + distance * Math.sin(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+                  (newTarget.y + distance * Math.sin(controls.current.getPolarAngle())),
+                  (newTarget.z + distance * Math.cos(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+                )
+                setControlTarget(newTarget)
+                setPositionTarget(positionTargetnew)
+                setSelectedApt(id)
+                setKey(id)
+                setExitApt(false)
+                floorSet(id)
+                setHovered(null)
+              }
+            }}
+          >
+            <meshStandardMaterial {...material} color={
+              hovered === id
+                ? !unAvailable.includes(id)
+                  ? "aquamarine"
+                  : "red"
+                : (selectedApt === id)
+                  ? "#d4d4d4"
+                  : unAvailable.includes(id) && selectedApt
+                    ? "red"
+                    : "#ababab"
+            } transparent opacity={
+              (!selectedApt)
+                ? 1
+                : (selectedApt === id) ? 1 : .6
+              // 
+            } />
+          </mesh>
+        ) : null
+      }
+        {
+          (selectedApt !== id && floor.includes(id)) ? (
+            <Marker rotation={[0, Math.PI / 2, 0]} position={[
+              (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2 + geometry.boundingBox.min.x,
+              (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
+              (geometry.boundingBox.max.z - geometry.boundingBox.min.z) / 2 + geometry.boundingBox.min.z - 250,
+            ]} scale={50}>
+              Apartment no. {id}
+            </Marker>
+          ) : null
+        }
+      </>
     )
   }
+
+  // const newTarget = new THREE.Vector3(
+  //   (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2 + geometry.boundingBox.min.x,
+  //   -geometry.boundingBox.max.z - 250,
+  //   (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
+  // )
 
   // return whole model
   return (

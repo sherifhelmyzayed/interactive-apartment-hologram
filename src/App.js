@@ -79,14 +79,7 @@ export default function App() {
           <Model controls={controls} selectedApt={selectedApt} setSelectedApt={setSelectedApt}
           />
         </Suspense>
-
-        {/* <Shadow
-          color="black"
-          colorStop={0}
-          opacity={1}
-          fog={true}
-        />
-      <BakeShadows /> */}
+        
         <ContactShadows frames={1} position={[0, -520, 0]} scale={10000} blur={1} far={9000} />
 
       </Canvas>
