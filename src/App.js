@@ -45,7 +45,7 @@ export default function App() {
       <RotatingModel />
 
       <Canvas
-        camera={{ fov: 45, zoom: 1, near: 200, far: 200000, position: [0, 0, 3000], }} style={{ height: `100vh`, width: '100vw' }} >
+        camera={{ fov: 45, zoom: 1, near: 200, far: 200000, position: [0, 400, 4000], }} style={{ height: `100vh`, width: '100vw' }} >
         <fog attach="fog" args={['#17171b', 0, 100000]} />
         <color attach="background" args={['#ffffff']} />
 

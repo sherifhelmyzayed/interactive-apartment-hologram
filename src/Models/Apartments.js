@@ -25,6 +25,8 @@ export function Model(props) {
     [4, 5, 6, 7]
   ]
 
+  const unAvailable = [1, 3, 9, 12, 13]
+
   console.log("renders");
 
   const { nodes, materials } = useGLTF(GLB);
@@ -137,7 +139,7 @@ export function Model(props) {
     })
 
     return (
-      (!selectedApt || selectedApt === geometry.uuid || floor.includes(id)) ? (
+      (!selectedApt || selectedApt === id || floor.includes(id)) ? (
         <mesh
           castShadow
           receiveShadow
@@ -161,26 +163,38 @@ export function Model(props) {
           //   }
           // }}
           onDoubleClick={e => {
-            e.stopPropagation();
-            const newTarget = new THREE.Vector3(
-              (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2 + geometry.boundingBox.min.x,
-              -geometry.boundingBox.max.z - 250,
-              (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
-            )
-            setControlTarget(newTarget)
-            setSelectedApt(geometry.uuid)
-            setKey(id)
-            setExitApt(false)
-            floorSet(id)
-            setHovered(null)
+            if (!unAvailable.includes(id)) {
+              e.stopPropagation();
+              const newTarget = new THREE.Vector3(
+                (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2 + geometry.boundingBox.min.x,
+                -geometry.boundingBox.max.z - 250,
+                (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
+              )
+              setControlTarget(newTarget)
+              setSelectedApt(id)
+              setKey(id)
+              setExitApt(false)
+              floorSet(id)
+              setHovered(null)
+            }
           }}
         >
-          <meshStandardMaterial {...material} color={hovered === id ? "aquamarine" : (selectedApt === geometry.uuid) ? "#d4d4d4" : "#ababab"} transparent opacity={
+          <meshStandardMaterial {...material} color={
+            hovered === id
+              ? !unAvailable.includes(id)
+                ? "aquamarine"
+                : "red"
+              : (selectedApt === id)
+                ? "#d4d4d4"
+                : unAvailable.includes(id) && selectedApt
+                  ? "red"
+                  : "#ababab"
+          } transparent opacity={
             (!selectedApt)
               ? 1
-              : (selectedApt === geometry.uuid) ? 1 : .6
+              : (selectedApt === id) ? 1 : .6
             // 
-            } />
+          } />
         </mesh>
       ) : null
     )
