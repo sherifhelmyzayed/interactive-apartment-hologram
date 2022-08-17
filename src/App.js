@@ -16,10 +16,10 @@ extend({ OrbitControls });
 const Loader = () => {
   const { total } = useProgress()
 
-  let cal = total / 154 * 100;
+  let cal = total / 30 * 100;
   console.log(cal);
   return (
-    <Html center>downloading {Math.round(cal)} %</Html>
+    <Html center>loading.. {Math.round(cal)} %</Html>
   )
 };
 
@@ -54,12 +54,12 @@ export default function App() {
     <HandlerContext.Provider value={val}>
       <RotatingModel selectedApt={selectedApt} setSelectedApt={setSelectedApt} />
       <Canvas
-        camera={{ fov: 45, zoom: 1, near: 200, far: 200000, position: [0, 400, 4000], }} style={{ height: `100vh`, width: '100vw' }} >
+        camera={{ fov: 55, zoom: 1, near: 200, far: 200000, position: [0, 400, 4000], }} style={{ height: `100vh`, width: '100vw' }} >
         <fog attach="fog" args={['#17171b', 0, 100000]} />
         <color attach="background" args={['#ffffff']} />
 
         <OrbitControls
-          enablePan={true}
+          enablePan={false}
           enableZoom={true}
           enableRotate={true}
           autoRotate={false}

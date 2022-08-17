@@ -104,9 +104,9 @@ export function Model(props) {
   const exitHandler = () => {
     controls.current.enableRotate = true
     const positionTargetnew = new THREE.Vector3(
-      (5000 * Math.sin(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+      (3500 * Math.sin(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
       (400),
-      (5000 * Math.cos(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+      (3500 * Math.cos(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
     )
     controls.current.enableRotate = false;
     setPositionTarget(positionTargetnew)
@@ -170,13 +170,10 @@ export function Model(props) {
                   -geometry.boundingBox.max.z - 250,
                   (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
                 )
-                let distance = controls.current.object.position.distanceTo(controls.current.target)
-                if (distance > 1600) distance = 1600
-                if (distance < 1200) distance = 1200
                 const positionTargetnew = new THREE.Vector3(
-                  (newTarget.x + distance * Math.sin(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
-                  (newTarget.y + distance * Math.sin(controls.current.getPolarAngle())),
-                  (newTarget.z + distance * Math.cos(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+                  (controlTarget.x + 2000 * Math.sin(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
+                  (controlTarget.y + 2000 * Math.sin(controls.current.getPolarAngle())),
+                  (controlTarget.z + 2000 * Math.cos(controls.current.getAzimuthalAngle()) * Math.sin(controls.current.getPolarAngle())),
                 )
                 setControlTarget(newTarget)
                 setPositionTarget(positionTargetnew)
