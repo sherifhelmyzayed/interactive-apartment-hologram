@@ -22,7 +22,7 @@ export function Model(props) {
 
   const [exitApt, setExitApt] = useState(false);
   const [key, setKey] = useState(null);
-  const [floor, setFloor] = useState(null);
+  const [floor, setFloor] = useState([]);
 
   const floorRef = [
     [0, 1, 8, 9],
@@ -114,6 +114,7 @@ export function Model(props) {
     setSelectedApt(null)
     setKey(null)
     setControlTarget(new THREE.Vector3(0, 0, 0))
+    setFloor([])
   };
 
 

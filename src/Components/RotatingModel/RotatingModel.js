@@ -9,7 +9,7 @@ const RotatingModelViewer = (props) => {
   const {selectedApt, setSelectedApt} = props
 
   const clickHandler = ()=> {
-    setSelectedApt(false)
+    // setSelectedApt(false)
   }
 
   return (
