@@ -2,7 +2,6 @@ import { useRef, Suspense, useState, createContext } from "react";
 import { Canvas, extend } from "@react-three/fiber";
 import { OrbitControls, ContactShadows, useProgress, Html } from "@react-three/drei";
 import { Model } from "./Models/Apartments.js";
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import RotatingModel from "./Components/RotatingModel/RotatingModel.js";
 
 export const HandlerContext = createContext()
@@ -31,19 +30,7 @@ export default function App() {
 
 
   const controls = useRef(null);
-  const handle = useFullScreenHandle();
 
-  const FullScreenButton = () => (
-    <div>
-      <button onClick={handle.enter}>
-        Enter fullscreen
-      </button>
-
-      <FullScreen handle={handle}>
-        Any fullscreen content here
-      </FullScreen>
-    </div>
-  )
 
   const val = {
     exit: null,
