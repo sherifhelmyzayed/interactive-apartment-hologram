@@ -39,9 +39,12 @@ export default function App() {
 
   return (
     <HandlerContext.Provider value={val}>
-      <RotatingModel selectedApt={selectedApt} setSelectedApt={setSelectedApt} />
+      {/* <RotatingModel selectedApt={selectedApt} setSelectedApt={setSelectedApt} /> */}
       <Canvas
-        camera={{ fov: 55, zoom: 1, near: 200, far: 200000, position: [0, 400, 4000], }} style={{ height: `100vh`, width: '100vw' }} >
+        camera={{ fov: 55, zoom: 1, near: 200, far: 200000, position: [0, 400, 4000], }} style={{ 
+          // height: `100vh`, width: '100vw' 
+          height: '720px', width: '1200px'
+          }} >
         <fog attach="fog" args={['#17171b', 0, 100000]} />
         <color attach="background" args={['#ffffff']} />
 
@@ -52,7 +55,7 @@ export default function App() {
           autoRotate={false}
           enableDamping={false}
           autoRotateSpeed={1}
-          zoomSpeed={0.3}
+          zoomSpeed={0.7}
           minDistance={0}
           maxDistance={10000}
           ref={controls}
@@ -66,8 +69,8 @@ export default function App() {
           <Model controls={controls} selectedApt={selectedApt} setSelectedApt={setSelectedApt}
           />
         </Suspense>
-        
-        <ContactShadows frames={1} position={[0, -520, 0]} scale={10000} blur={1} far={9000} />
+
+        {/* <ContactShadows frames={1} position={[0, -520, 0]} scale={10000} blur={1} far={9000} /> */}
 
       </Canvas>
     </HandlerContext.Provider>

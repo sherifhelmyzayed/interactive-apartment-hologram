@@ -15,13 +15,13 @@ export function Model(props) {
 
   const { controls, setSelectedApt, selectedApt } = props;
 
+  // states 
   const [controlTarget, setControlTarget] = useState(new THREE.Vector3(0, 0, 0));
   const [positionTarget, setPositionTarget] = useState(new THREE.Vector3(0, 0, 0));
 
   const [hovered, setHovered] = useState(null);
 
   const [exitApt, setExitApt] = useState(false);
-  const [key, setKey] = useState(null);
   const [floor, setFloor] = useState([]);
 
   const floorRef = [
@@ -112,14 +112,15 @@ export function Model(props) {
     setPositionTarget(positionTargetnew)
     setExitApt(true)
     setSelectedApt(null)
-    setKey(null)
     setControlTarget(new THREE.Vector3(0, 0, 0))
     setFloor([])
   };
 
 
   const Apartment = (props) => {
-    const { geometry, material, id } = props;
+    const { geometry, material, id , details} = props;
+
+    console.log(details);
 
     const floorSet = (id) => {
       setFloor(floorRef.filter(item => item.includes(id))[0]);
@@ -178,7 +179,6 @@ export function Model(props) {
                 setControlTarget(newTarget)
                 setPositionTarget(positionTargetnew)
                 setSelectedApt(id)
-                setKey(id)
                 setExitApt(false)
                 floorSet(id)
                 setHovered(null)
@@ -205,7 +205,7 @@ export function Model(props) {
         ) : null
       }
         {
-          (selectedApt !== id && floor.includes(id)) ? (
+          (floor.includes(id)) ? (
             <Marker rotation={[0, Math.PI / 2, 0]} position={[
               (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2 + geometry.boundingBox.min.x,
               (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2 + geometry.boundingBox.min.y,
@@ -232,11 +232,7 @@ export function Model(props) {
         (selectedApt) ? (
           <>
             <Marker rotation={[0, Math.PI / 2, 0]} position={[controlTarget.x, controlTarget.y + 300, controlTarget.z]} scale={50}>
-              Apartment no. {key}
-              <FaTimesCircle style={{ color: 'red', cursor: 'pointer', width: '10px', marginLeft: 5 }} onClick={() => exitHandler()} />
-            </Marker>
-            <Marker rotation={[0, Math.PI / 2, 0]} position={[controlTarget.x, controlTarget.y + 150, controlTarget.z]} scale={100}>
-              <FaMapMarkerAlt style={{ color: 'orange' }} />
+              <FaTimesCircle style={{ color: 'red', cursor: 'pointer', width: '200px', height: '30px'}} onClick={() => exitHandler()} />
             </Marker>
           </>
         ) : null
@@ -260,7 +256,7 @@ export function Model(props) {
           {
             arrayOfObj.map((item, key) => {
               return (
-                <Apartment geometry={item.mesh[1].geometry} material={materials.GreyColor} id={key} />
+                <Apartment geometry={item.mesh[1].geometry} material={materials.GreyColor} id={key} details={item}/>
               )
             })
           }
