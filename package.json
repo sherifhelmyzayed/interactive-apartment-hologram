@@ -2,7 +2,7 @@
   "name": "interactive-apartments",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://bricksvisuals.com/webapp/so-interact/",
+  "homepage": "https://demo.bricksvisuals.com/so-interact/",
   "dependencies": {
     "@react-spring/three": "^9.5.2",
     "@react-three/drei": "^9.19.6",
